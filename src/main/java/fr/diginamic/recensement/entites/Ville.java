@@ -1,5 +1,9 @@
 package fr.diginamic.recensement.entites;
 
+import fr.diginamic.recensement.annotations.ToString;
+
+import java.lang.reflect.Field;
+
 /**
  * Représente une ville
  * 
@@ -11,14 +15,18 @@ public class Ville implements EnsemblePop {
 	/** codeRegion : code de la région */
 	private String codeRegion;
 	/** nomRegion : nom de la région */
+	@ToString
 	private String nomRegion;
 	/** codeDepartement : code du département */
 	private String codeDepartement;
 	/** code INSEE de la ville */
+	@ToString
 	private String codeVille;
 	/** nom de la ville */
+	@ToString
 	private String nom;
 	/** population totale */
+	@ToString
 	private int population;
 
 	/**
@@ -42,10 +50,10 @@ public class Ville implements EnsemblePop {
 		this.population = population;
 	}
 
-	@Override
-	public String toString() {
-		return "Département n°" + codeDepartement + " - Ville : " + nom + " - " + population + " hab.";
-	}
+//	@Override
+//	public String toString() {
+//		return "Département n°" + codeDepartement + " - Ville : " + nom + " - " + population + " hab.";
+//	}
 
 	/**
 	 * Getter
@@ -156,4 +164,24 @@ public class Ville implements EnsemblePop {
 		this.population = population;
 	}
 
+	@Override
+	public String toString() {
+		StringBuilder result = new StringBuilder();
+		Field[] fields = this.getClass().getDeclaredFields();
+
+		for (Field field : fields) {
+			if (field.isAnnotationPresent(ToString.class)) {
+				field.setAccessible(true);
+				try {
+					result.append(field.getName())
+							.append(": ")
+							.append(field.get(this))
+							.append("\n");
+				} catch (IllegalAccessException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return result.toString();
+	}
 }
