@@ -47,11 +47,21 @@ public class Application {
 			afficherMenu();
 
 
+            try {
                 // Poser une question à l'utilisateur
                 String choixMenu = scanner.nextLine();
+				System.out.println("Donnez un chiffre entre 1 et 9 ou 99");
 
                 // Conversion du choix utilisateur en int
                 choix = Integer.parseInt(choixMenu);
+
+				if ((choix < 1 || choix > 9) && choix != 99) {
+					throw new ExceptionFonctionnelle("Choix invalide : Veuillez entrer un chiffre entre 1 et 9 ou 99.");
+				}
+			}catch (InputMismatchException e){
+				scanner.next(); // Clear the invalid input
+				throw new ExceptionFonctionnelle("Saisissez uniquement un chiffre !");
+			}
 
 
 
@@ -71,14 +81,7 @@ public class Application {
 				break;
 			case 4:
 				RecherchePopulationBorneService recherchePopBorne = new RecherchePopulationBorneService();
-                try {
                     recherchePopBorne.traiter(recensement, scanner);
-                } catch (ExceptionFonctionnelle e) {
-					System.err.println(e.getMessage());
-                }catch (InputMismatchException e){
-					scanner.next(); // Clear the invalid input
-					throw new ExceptionFonctionnelle("Saisissez un chiffre !");
-				}
                 break;
 			case 5:
 				RechercheVillesPlusPeupleesDepartement rechercheVillesPlusPeupleesDepartement = new RechercheVillesPlusPeupleesDepartement();

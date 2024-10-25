@@ -25,7 +25,7 @@ public class RecherchePopulationBorneService extends MenuService {
         String choix = null;
         String saisieMin = null;
         String saisieMax = null;
-        try {
+
             System.out.println("Quel est le code du département recherché ? ");
             choix = scanner.nextLine();
 
@@ -39,19 +39,26 @@ public class RecherchePopulationBorneService extends MenuService {
 
             System.out.println("Choississez une population maximum (en milliers d'habitants): ");
             saisieMax = scanner.nextLine();
-        } catch (InputMismatchException e) {
-			throw new ExceptionFonctionnelle("Afficher uniquement un chiffre !");
+
+
+        int min = 0;
+        int max = 0;
+        try {
+            min = Integer.parseInt(saisieMin) * 1000;
+            max = Integer.parseInt(saisieMax) * 1000;
+
+        } catch (NumberFormatException e) {
+            throw new InputMismatchException("Erreur de saisie : Veuillez entrer un nombre entier valide.");
         }
 
-
-        int min = Integer.parseInt(saisieMin) * 1000;
-		int max = Integer.parseInt(saisieMax) * 1000;
-
-		if(min<0 || max<0){
+        if(min<0 || max<0){
 			throw new ExceptionFonctionnelle("Le minimum ou maximum  habitant ne peut pas être négatif");
 		}
 		List<Ville> villes = rec.getVilles();
 		for (Ville ville : villes) {
+            if (!ville.getCodeDepartement().contains(ville.getCodeDepartement())) {
+                throw new ExceptionFonctionnelle("Le code département " + ville.getCodeDepartement() + " est inconnu.");
+            }
 			if (ville.getCodeDepartement().equalsIgnoreCase(choix)) {
 				if (ville.getPopulation() >= min && ville.getPopulation() <= max) {
 					System.out.println(ville);
