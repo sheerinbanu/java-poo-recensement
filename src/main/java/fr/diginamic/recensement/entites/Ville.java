@@ -15,7 +15,7 @@ public class Ville implements EnsemblePop {
 	/** codeRegion : code de la région */
 	private String codeRegion;
 	/** nomRegion : nom de la région */
-	@ToString
+	@ToString(uppercase = true)
 	private String nomRegion;
 	/** codeDepartement : code du département */
 	private String codeDepartement;
@@ -23,7 +23,7 @@ public class Ville implements EnsemblePop {
 	@ToString
 	private String codeVille;
 	/** nom de la ville */
-	@ToString
+	@ToString (uppercase = true)
 	private String nom;
 	/** population totale */
 	@ToString
@@ -173,9 +173,13 @@ public class Ville implements EnsemblePop {
 			if (field.isAnnotationPresent(ToString.class)) {
 				field.setAccessible(true);
 				try {
+					String fieldValue = String.valueOf(field.get(this));
+					if (field.getAnnotation(ToString.class).uppercase()) {
+						fieldValue = fieldValue.toUpperCase();
+					}
 					result.append(field.getName())
 							.append(": ")
-							.append(field.get(this))
+							.append(fieldValue)
 							.append("\n");
 				} catch (IllegalAccessException e) {
 					e.printStackTrace();
