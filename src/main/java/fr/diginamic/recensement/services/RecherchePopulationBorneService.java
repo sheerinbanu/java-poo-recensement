@@ -8,6 +8,7 @@ import fr.diginamic.recensement.entites.Departement;
 import fr.diginamic.recensement.entites.ExceptionFonctionnelle;
 import fr.diginamic.recensement.entites.Recensement;
 import fr.diginamic.recensement.entites.Ville;
+import org.apache.commons.lang3.math.NumberUtils;
 
 /**
  * Recherche et affichage de toutes les villes d'un département dont la
@@ -35,6 +36,10 @@ public class RecherchePopulationBorneService extends MenuService {
 
             System.out.println("Choississez une population minimum (en milliers d'habitants): ");
             saisieMin = scanner.nextLine();
+
+        if (NumberUtils.isDigits(saisieMin) || NumberUtils.isDigits(saisieMax)) {
+            throw new ExceptionFonctionnelle("Saisissez de nouveau le chiffre");
+        }
 
 
             System.out.println("Choississez une population maximum (en milliers d'habitants): ");
