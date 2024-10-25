@@ -1,7 +1,9 @@
 package fr.diginamic.recensement;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
+import fr.diginamic.recensement.entites.ExceptionFonctionnelle;
 import fr.diginamic.recensement.entites.Recensement;
 import fr.diginamic.recensement.services.RechercheDepartementsPlusPeuplees;
 import fr.diginamic.recensement.services.RecherchePopulationBorneService;
@@ -26,7 +28,7 @@ public class Application {
 	 * 
 	 * @param args arguments (non utilisés ici)
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws ExceptionFonctionnelle {
 		Scanner scanner = new Scanner(System.in);
 
 		String filePath = ClassLoader.getSystemClassLoader().getResource("recensement.csv").getFile();
@@ -44,13 +46,16 @@ public class Application {
 			// Affichage du menu
 			afficherMenu();
 
-			// Poser une question à l'utilisateur
-			String choixMenu = scanner.nextLine();
 
-			// Conversion du choix utilisateur en int
-			choix = Integer.parseInt(choixMenu);
+                // Poser une question à l'utilisateur
+				String choixMenu = scanner.nextLine();
 
-			// On exécute l'option correspondant au choix de l'utilisateur
+                // Conversion du choix utilisateur en int
+                choix = Integer.parseInt(choixMenu);
+
+
+
+            // On exécute l'option correspondant au choix de l'utilisateur
 			switch (choix) {
 			case 1:
 				RecherchePopulationVilleService rechercheVille = new RecherchePopulationVilleService();
@@ -66,8 +71,15 @@ public class Application {
 				break;
 			case 4:
 				RecherchePopulationBorneService recherchePopBorne = new RecherchePopulationBorneService();
-				recherchePopBorne.traiter(recensement, scanner);
-				break;
+                try {
+                    recherchePopBorne.traiter(recensement, scanner);
+                } catch (ExceptionFonctionnelle e) {
+					System.err.println(e.getMessage());
+                }catch (InputMismatchException e){
+					scanner.next(); // Clear the invalid input
+					throw new ExceptionFonctionnelle("Saisissez un chiffre !");
+				}
+                break;
 			case 5:
 				RechercheVillesPlusPeupleesDepartement rechercheVillesPlusPeupleesDepartement = new RechercheVillesPlusPeupleesDepartement();
 				rechercheVillesPlusPeupleesDepartement.traiter(recensement, scanner);
