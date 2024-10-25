@@ -48,7 +48,7 @@ public class Application {
 
 
                 // Poser une question à l'utilisateur
-				String choixMenu = scanner.nextLine();
+                String choixMenu = scanner.nextLine();
 
                 // Conversion du choix utilisateur en int
                 choix = Integer.parseInt(choixMenu);
